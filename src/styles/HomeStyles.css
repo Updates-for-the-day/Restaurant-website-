@@ -1,0 +1,59 @@
+.home{
+    background-image: url('../images/banner.jpg');
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    font-size: larger;
+    font-family: cursive;
+    color: black;
+    text-align: left;
+}
+
+.headerContainer{
+    width: auto ;
+    margin-left : 5%;
+}
+
+.home.headerContainer h1{
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 300px;
+    margin-bottom: 20px;
+    font-size: larger;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+ .home.headerContainer p{
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.home.headerContainer button{
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home.headerContainer button:hover{
+    background-color: goldenrod;
+    cursor: pointer;
+    transition: 1s; 
+}
+
