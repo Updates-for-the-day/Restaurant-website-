@@ -1,153 +1,200 @@
-import React,{useState} from 'react';
-import { Box, Typography,AppBar, Toolbar,IconButton, Drawer } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, AppBar, Toolbar, IconButton, Drawer, Divider, Button, useTheme, Badge } from '@mui/material';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
-import { Link } from 'react-router-dom';
-import "../../styles/HeaderStyles.css";
+import { Link, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import Divider from '@mui/material/Divider';
-
-
+import CloseIcon from '@mui/icons-material/Close';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const Header = () => {
-  const [mobileOpen,setMobileOpen] = useState(false);
-//hndle menu click
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
+  const location = useLocation();
+  const cartItemCount = 4;
+
   const handleDrawerToggle = () => {
     setMobileOpen(prev => !prev);
-   
   };
-  //menu drawer
-const drawer = (
-  <Box onClick={handleDrawerToggle} sx={{textAlign:'center'}}>
-    <Typography
-     color="goldenrod"
-     variant="h6"
-     component="div"
-     sx={{
-      flexGrow: 1,
-      my: 2,
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      fontWeight: 'bold',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      textAlign: 'center',
-      whiteSpace: 'normal', // allow wrapping
-      lineHeight: 1.2,
-      fontSize: {
-      xs: '1.1rem', // small screens
-      sm: '1.5rem', // tablets
-      md: '2rem',   // desktops
-       },
-      }}
-     >   
-       <FastfoodIcon
-     sx={{
-      fontSize: { xs: '22px', sm: '30px', md: '40px' },
-      color: 'orange',
-      flexShrink: 0,
-     }}
-      />
-      MY RESTAURANT
-    </Typography>
 
+  const isActive = (path) => location.pathname === path;
 
-    <Divider sx={{ bgcolor: 'goldenrod', my: 1 }} />
-    
-      <ul className="mobile-navigation" style={{listStyle: 'none', padding: 0, margin: '16px 0'}} >
-        <li>
-          <Link to ={'/'}> Home </Link>
-        </li>
-        <li>
-          <Link to ={'/menu'}> Menu </Link>
-        </li>
-        <li>
-          <Link to ={'/about'}> About </Link>
-        </li>
-        <li>
-          <Link to ={'/contact'}> Contact </Link>
-        </li>
-      </ul>
-            
-  </Box>
-);
+  const navigationLinks = [
+    { text: 'Home', path: '/' },
+    { text: 'Menu', path: '/menu' },
+    { text: 'About', path: '/about' },
+    { text: 'Contact', path: '/contact' },
+  ];
 
-return (
-    <>
-      <Box>
-        <AppBar component="nav" sx={{ bgcolor: "black", padding: { xs: "6px", sm: "10px" } }}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
+  const drawer = (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography
+          color={theme.palette.secondary.main}
+          variant="h6"
+          component="div"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            fontWeight: 'bold',
+          }}
+        >
+          <FastfoodIcon sx={{ fontSize: '28px', color: 'orange' }} />
+          MY RESTAURANT
+        </Typography>
+        <IconButton 
+          onClick={handleDrawerToggle} 
+          aria-label="Close menu"
+          sx={{ color: theme.palette.text.primary }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
-            <Typography
-              color={"goldenrod"}
-              variant="h4"
-              sx={{
-               flexGrow: 1,
-               display: "flex",
-               alignItems: "center",
-               justifyContent: { xs: "center", sm: "flex-start" }, // center on phones
-               gap: 1,
-                 minWidth: 0, // important to allow children to shrink/wrap
-              }}
-              >
-              <FastfoodIcon sx={{ fontSize: "40px", color: "orange" }} />
-              MY RESTAURANT
-            </Typography>
+      <Divider sx={{ bgcolor: theme.palette.secondary.main }} />
 
-            <Box sx={{ display: { xs: "none", sm: "block" }, marginLeft: "auto" }}>
-              <ul
-                className="navigation-menu"
-                style={{ listStyleType: "none", display: "flex", gap: "30px", margin: 0, padding: 0 }}
-              >
-                <li>
-                  <Link to={"/"}> Home </Link>
-                </li>
-                <li>
-                  <Link to={"/menu"}> Menu </Link>
-                </li>
-                <li>
-                  <Link to={"/about"}> About </Link>
-                </li>
-                <li>
-                  <Link to={"/contact"}> Contact </Link>
-                </li>
-              </ul>
-            </Box>
-          </Toolbar>
-        </AppBar>
-
-        <Box component="nav">
-          <Drawer
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
+      <Box sx={{ flexGrow: 1, py: 2 }}>
+        {navigationLinks.map((item) => (
+          <Button
+            key={item.path}
+            component={Link}
+            to={item.path}
+            onClick={handleDrawerToggle}
             sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
+              display: 'block',
+              width: '100%',
+              py: 2,
+              px: 3,
+              textAlign: 'left',
+              color: isActive(item.path) ? theme.palette.secondary.main : theme.palette.text.primary,
+              bgcolor: isActive(item.path) ? `${theme.palette.secondary.main}20` : 'transparent',
+              borderLeft: isActive(item.path) ? `4px solid ${theme.palette.secondary.main}` : '4px solid transparent',
+              fontWeight: isActive(item.path) ? 600 : 500,
+              fontSize: '1.05rem',
+              '&:hover': {
+                bgcolor: `${theme.palette.secondary.main}15`,
+                color: theme.palette.secondary.main,
+                borderLeft: `4px solid ${theme.palette.secondary.main}`,
+              },
+              transition: 'all 0.2s ease-in-out',
             }}
           >
-            {drawer}
-          </Drawer>
-        </Box>
-          <Box sx={{ p : 1}}>
-
-           <Toolbar />
-          </Box>
-       
+            {item.text}
+          </Button>
+        ))}
       </Box>
+    </Box>
+  );
+
+  return (
+    <>
+      <AppBar component="nav" position="sticky">
+        <Toolbar sx={{ py: { xs: 0.5, sm: 1 } }}>
+          <IconButton
+            color="inherit"
+            aria-label="Open navigation menu"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          <Typography
+            color={theme.palette.secondary.main}
+            variant="h5"
+            component={Link}
+            to="/"
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", sm: "flex-start" },
+              gap: 1,
+              textDecoration: 'none',
+              fontWeight: 700,
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'scale(1.02)',
+              },
+            }}
+          >
+            <FastfoodIcon sx={{
+              fontSize: { xs: "32px", sm: "40px" },
+              color: 'orange',
+            }} />
+            MY RESTAURANT
+          </Typography>
+
+          <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: 'center', gap: 1 }}>
+            {navigationLinks.map((item) => (
+              <Button
+                key={item.path}
+                component={Link}
+                to={item.path}
+                sx={{
+                  color: isActive(item.path) ? theme.palette.secondary.main : theme.palette.text.white,
+                  fontSize: '1rem',
+                  fontWeight: isActive(item.path) ? 600 : 500,
+                  px: 2,
+                  py: 1,
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: isActive(item.path) ? '80%' : '0%',
+                    height: '3px',
+                    bgcolor: theme.palette.secondary.main,
+                    transition: 'width 0.3s ease-in-out',
+                    borderRadius: '2px 2px 0 0',
+                  },
+                  '&:hover': {
+                    color: theme.palette.secondary.main,
+                    bgcolor: 'transparent',
+                    '&::after': {
+                      width: '80%',
+                    },
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              >
+                {item.text}
+              </Button>
+            ))}
+            <IconButton
+              aria-label={`Shopping cart with ${cartItemCount} items`}
+              color="inherit"
+              sx={{ ml: 1 }}
+            >
+              <Badge badgeContent={cartItemCount} color="secondary">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: 280,
+            bgcolor: theme.palette.background.paper,
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </>
-  )
-  
+  );
 };
 
 export default Header;
-  
